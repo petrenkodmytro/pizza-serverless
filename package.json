@@ -1,0 +1,25 @@
+{
+  "name": "pizza-serverless",
+  "version": "0.1.0",
+  "license": "ISC",
+  "scripts": {
+    "start": "netlify dev",
+    "codegen": "graphql-codegen --config codegen.yml"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "5.0.0",
+    "@graphql-codegen/typescript": "4.0.1",
+    "@graphql-codegen/typescript-graphql-request": "^6.0.1",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
+    "@graphql-codegen/typescript-resolvers": "4.0.1",
+    "@netlify/functions": "^2.4.1",
+    "netlify-cli": "^17.10.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
