@@ -21,6 +21,16 @@ export type Scalars = {
   uuid: { input: any; output: any; }
 };
 
+export type AdminLoginInput = {
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+export type AdminLoginOutput = {
+  __typename?: 'AdminLoginOutput';
+  accessToken: Scalars['String']['output'];
+};
+
 export type AdminRegisterInput = {
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -477,6 +487,8 @@ export type Menu_Variance_Fields = {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
+  /** Admin registration */
+  adminRegister?: Maybe<AdminRegisterOutput>;
   /** delete data from the table: "admin" */
   delete_admin?: Maybe<Admin_Mutation_Response>;
   /** delete single row from the table: "admin" */
@@ -493,8 +505,6 @@ export type Mutation_Root = {
   insert_menu?: Maybe<Menu_Mutation_Response>;
   /** insert a single row into the table: "menu" */
   insert_menu_one?: Maybe<Menu>;
-  /** Admin registration */
-  register?: Maybe<AdminRegisterOutput>;
   /** update data of the table: "admin" */
   update_admin?: Maybe<Admin_Mutation_Response>;
   /** update single row of the table: "admin" */
@@ -507,6 +517,12 @@ export type Mutation_Root = {
   update_menu_by_pk?: Maybe<Menu>;
   /** update multiples rows of table: "menu" */
   update_menu_many?: Maybe<Array<Maybe<Menu_Mutation_Response>>>;
+};
+
+
+/** mutation root */
+export type Mutation_RootAdminRegisterArgs = {
+  admin: AdminRegisterInput;
 };
 
 
@@ -559,12 +575,6 @@ export type Mutation_RootInsert_MenuArgs = {
 export type Mutation_RootInsert_Menu_OneArgs = {
   object: Menu_Insert_Input;
   on_conflict?: InputMaybe<Menu_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootRegisterArgs = {
-  admin: AdminRegisterInput;
 };
 
 
@@ -642,6 +652,8 @@ export type Query_Root = {
   __typename?: 'query_root';
   /** fetch data from the table: "admin" */
   admin: Array<Admin>;
+  /** Admin login */
+  adminLogin?: Maybe<AdminLoginOutput>;
   /** fetch aggregated fields from the table: "admin" */
   admin_aggregate: Admin_Aggregate;
   /** fetch data from the table: "admin" using primary key columns */
@@ -661,6 +673,11 @@ export type Query_RootAdminArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Admin_Order_By>>;
   where?: InputMaybe<Admin_Bool_Exp>;
+};
+
+
+export type Query_RootAdminLoginArgs = {
+  arg1: AdminLoginInput;
 };
 
 
@@ -864,6 +881,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AdminLoginInput: AdminLoginInput;
+  AdminLoginOutput: ResolverTypeWrapper<AdminLoginOutput>;
   AdminRegisterInput: AdminRegisterInput;
   AdminRegisterOutput: ResolverTypeWrapper<AdminRegisterOutput>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
@@ -929,6 +948,8 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AdminLoginInput: AdminLoginInput;
+  AdminLoginOutput: AdminLoginOutput;
   AdminRegisterInput: AdminRegisterInput;
   AdminRegisterOutput: AdminRegisterOutput;
   Boolean: Scalars['Boolean']['output'];
@@ -990,6 +1011,11 @@ export type CachedDirectiveArgs = {
 };
 
 export type CachedDirectiveResolver<Result, Parent, ContextType = any, Args = CachedDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type AdminLoginOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminLoginOutput'] = ResolversParentTypes['AdminLoginOutput']> = {
+  accessToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type AdminRegisterOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminRegisterOutput'] = ResolversParentTypes['AdminRegisterOutput']> = {
   accessToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1142,6 +1168,7 @@ export type Menu_Variance_FieldsResolvers<ContextType = any, ParentType extends 
 };
 
 export type Mutation_RootResolvers<ContextType = any, ParentType extends ResolversParentTypes['mutation_root'] = ResolversParentTypes['mutation_root']> = {
+  adminRegister?: Resolver<Maybe<ResolversTypes['AdminRegisterOutput']>, ParentType, ContextType, RequireFields<Mutation_RootAdminRegisterArgs, 'admin'>>;
   delete_admin?: Resolver<Maybe<ResolversTypes['admin_mutation_response']>, ParentType, ContextType, RequireFields<Mutation_RootDelete_AdminArgs, 'where'>>;
   delete_admin_by_pk?: Resolver<Maybe<ResolversTypes['admin']>, ParentType, ContextType, RequireFields<Mutation_RootDelete_Admin_By_PkArgs, 'id'>>;
   delete_menu?: Resolver<Maybe<ResolversTypes['menu_mutation_response']>, ParentType, ContextType, RequireFields<Mutation_RootDelete_MenuArgs, 'where'>>;
@@ -1150,7 +1177,6 @@ export type Mutation_RootResolvers<ContextType = any, ParentType extends Resolve
   insert_admin_one?: Resolver<Maybe<ResolversTypes['admin']>, ParentType, ContextType, RequireFields<Mutation_RootInsert_Admin_OneArgs, 'object'>>;
   insert_menu?: Resolver<Maybe<ResolversTypes['menu_mutation_response']>, ParentType, ContextType, RequireFields<Mutation_RootInsert_MenuArgs, 'objects'>>;
   insert_menu_one?: Resolver<Maybe<ResolversTypes['menu']>, ParentType, ContextType, RequireFields<Mutation_RootInsert_Menu_OneArgs, 'object'>>;
-  register?: Resolver<Maybe<ResolversTypes['AdminRegisterOutput']>, ParentType, ContextType, RequireFields<Mutation_RootRegisterArgs, 'admin'>>;
   update_admin?: Resolver<Maybe<ResolversTypes['admin_mutation_response']>, ParentType, ContextType, RequireFields<Mutation_RootUpdate_AdminArgs, 'where'>>;
   update_admin_by_pk?: Resolver<Maybe<ResolversTypes['admin']>, ParentType, ContextType, RequireFields<Mutation_RootUpdate_Admin_By_PkArgs, 'pk_columns'>>;
   update_admin_many?: Resolver<Maybe<Array<Maybe<ResolversTypes['admin_mutation_response']>>>, ParentType, ContextType, RequireFields<Mutation_RootUpdate_Admin_ManyArgs, 'updates'>>;
@@ -1165,6 +1191,7 @@ export interface NumericScalarConfig extends GraphQLScalarTypeConfig<ResolversTy
 
 export type Query_RootResolvers<ContextType = any, ParentType extends ResolversParentTypes['query_root'] = ResolversParentTypes['query_root']> = {
   admin?: Resolver<Array<ResolversTypes['admin']>, ParentType, ContextType, Partial<Query_RootAdminArgs>>;
+  adminLogin?: Resolver<Maybe<ResolversTypes['AdminLoginOutput']>, ParentType, ContextType, RequireFields<Query_RootAdminLoginArgs, 'arg1'>>;
   admin_aggregate?: Resolver<ResolversTypes['admin_aggregate'], ParentType, ContextType, Partial<Query_RootAdmin_AggregateArgs>>;
   admin_by_pk?: Resolver<Maybe<ResolversTypes['admin']>, ParentType, ContextType, RequireFields<Query_RootAdmin_By_PkArgs, 'id'>>;
   menu?: Resolver<Array<ResolversTypes['menu']>, ParentType, ContextType, Partial<Query_RootMenuArgs>>;
@@ -1188,6 +1215,7 @@ export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type Resolvers<ContextType = any> = {
+  AdminLoginOutput?: AdminLoginOutputResolvers<ContextType>;
   AdminRegisterOutput?: AdminRegisterOutputResolvers<ContextType>;
   admin?: AdminResolvers<ContextType>;
   admin_aggregate?: Admin_AggregateResolvers<ContextType>;
@@ -1220,21 +1248,34 @@ export type DirectiveResolvers<ContextType = any> = {
   cached?: CachedDirectiveResolver<any, any, ContextType>;
 };
 
-export type InsertAdminMutationVariables = Exact<{
-  password?: InputMaybe<Scalars['String']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
+export type GetAdminByUsernameQueryVariables = Exact<{
+  username: Scalars['String']['input'];
 }>;
 
 
-export type InsertAdminMutation = { __typename?: 'mutation_root', insert_admin?: { __typename?: 'admin_mutation_response', returning: Array<{ __typename?: 'admin', id: any }> } | null };
+export type GetAdminByUsernameQuery = { __typename?: 'query_root', admin: Array<{ __typename?: 'admin', id: any, password: string }> };
+
+export type InsertAdminMutationVariables = Exact<{
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+}>;
 
 
+export type InsertAdminMutation = { __typename?: 'mutation_root', insert_admin_one?: { __typename?: 'admin', id: any } | null };
+
+
+export const GetAdminByUsernameDocument = gql`
+    query GetAdminByUsername($username: String!) {
+  admin(where: {username: {_eq: $username}}) {
+    id
+    password
+  }
+}
+    `;
 export const InsertAdminDocument = gql`
-    mutation InsertAdmin($password: String = "", $username: String = "") {
-  insert_admin(objects: {password: $password, username: $username}) {
-    returning {
-      id
-    }
+    mutation InsertAdmin($password: String!, $username: String!) {
+  insert_admin_one(object: {password: $password, username: $username}) {
+    id
   }
 }
     `;
@@ -1246,7 +1287,10 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    InsertAdmin(variables?: InsertAdminMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<InsertAdminMutation> {
+    GetAdminByUsername(variables: GetAdminByUsernameQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAdminByUsernameQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetAdminByUsernameQuery>(GetAdminByUsernameDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAdminByUsername', 'query');
+    },
+    InsertAdmin(variables: InsertAdminMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<InsertAdminMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<InsertAdminMutation>(InsertAdminDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'InsertAdmin', 'mutation');
     }
   };
