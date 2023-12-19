@@ -21,6 +21,11 @@ export type Scalars = {
   uuid: { input: any; output: any; }
 };
 
+export type AdminGetMeOutput = {
+  __typename?: 'AdminGetMeOutput';
+  username: Scalars['String']['output'];
+};
+
 export type AdminLoginInput = {
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -652,6 +657,7 @@ export type Query_Root = {
   __typename?: 'query_root';
   /** fetch data from the table: "admin" */
   admin: Array<Admin>;
+  adminGetMe?: Maybe<AdminGetMeOutput>;
   /** Admin login */
   adminLogin?: Maybe<AdminLoginOutput>;
   /** fetch aggregated fields from the table: "admin" */
@@ -677,7 +683,7 @@ export type Query_RootAdminArgs = {
 
 
 export type Query_RootAdminLoginArgs = {
-  arg1: AdminLoginInput;
+  admin: AdminLoginInput;
 };
 
 
@@ -881,6 +887,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AdminGetMeOutput: ResolverTypeWrapper<AdminGetMeOutput>;
   AdminLoginInput: AdminLoginInput;
   AdminLoginOutput: ResolverTypeWrapper<AdminLoginOutput>;
   AdminRegisterInput: AdminRegisterInput;
@@ -948,6 +955,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AdminGetMeOutput: AdminGetMeOutput;
   AdminLoginInput: AdminLoginInput;
   AdminLoginOutput: AdminLoginOutput;
   AdminRegisterInput: AdminRegisterInput;
@@ -1011,6 +1019,11 @@ export type CachedDirectiveArgs = {
 };
 
 export type CachedDirectiveResolver<Result, Parent, ContextType = any, Args = CachedDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type AdminGetMeOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminGetMeOutput'] = ResolversParentTypes['AdminGetMeOutput']> = {
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type AdminLoginOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminLoginOutput'] = ResolversParentTypes['AdminLoginOutput']> = {
   accessToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1191,7 +1204,8 @@ export interface NumericScalarConfig extends GraphQLScalarTypeConfig<ResolversTy
 
 export type Query_RootResolvers<ContextType = any, ParentType extends ResolversParentTypes['query_root'] = ResolversParentTypes['query_root']> = {
   admin?: Resolver<Array<ResolversTypes['admin']>, ParentType, ContextType, Partial<Query_RootAdminArgs>>;
-  adminLogin?: Resolver<Maybe<ResolversTypes['AdminLoginOutput']>, ParentType, ContextType, RequireFields<Query_RootAdminLoginArgs, 'arg1'>>;
+  adminGetMe?: Resolver<Maybe<ResolversTypes['AdminGetMeOutput']>, ParentType, ContextType>;
+  adminLogin?: Resolver<Maybe<ResolversTypes['AdminLoginOutput']>, ParentType, ContextType, RequireFields<Query_RootAdminLoginArgs, 'admin'>>;
   admin_aggregate?: Resolver<ResolversTypes['admin_aggregate'], ParentType, ContextType, Partial<Query_RootAdmin_AggregateArgs>>;
   admin_by_pk?: Resolver<Maybe<ResolversTypes['admin']>, ParentType, ContextType, RequireFields<Query_RootAdmin_By_PkArgs, 'id'>>;
   menu?: Resolver<Array<ResolversTypes['menu']>, ParentType, ContextType, Partial<Query_RootMenuArgs>>;
@@ -1215,6 +1229,7 @@ export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type Resolvers<ContextType = any> = {
+  AdminGetMeOutput?: AdminGetMeOutputResolvers<ContextType>;
   AdminLoginOutput?: AdminLoginOutputResolvers<ContextType>;
   AdminRegisterOutput?: AdminRegisterOutputResolvers<ContextType>;
   admin?: AdminResolvers<ContextType>;
@@ -1255,6 +1270,13 @@ export type GetAdminByUsernameQueryVariables = Exact<{
 
 export type GetAdminByUsernameQuery = { __typename?: 'query_root', admin: Array<{ __typename?: 'admin', id: any, password: string }> };
 
+export type AdminGetMeQueryVariables = Exact<{
+  id: Scalars['uuid']['input'];
+}>;
+
+
+export type AdminGetMeQuery = { __typename?: 'query_root', admin_by_pk?: { __typename?: 'admin', username: string } | null };
+
 export type InsertAdminMutationVariables = Exact<{
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -1269,6 +1291,13 @@ export const GetAdminByUsernameDocument = gql`
   admin(where: {username: {_eq: $username}}) {
     id
     password
+  }
+}
+    `;
+export const AdminGetMeDocument = gql`
+    query AdminGetMe($id: uuid!) {
+  admin_by_pk(id: $id) {
+    username
   }
 }
     `;
@@ -1289,6 +1318,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
   return {
     GetAdminByUsername(variables: GetAdminByUsernameQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAdminByUsernameQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAdminByUsernameQuery>(GetAdminByUsernameDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAdminByUsername', 'query');
+    },
+    AdminGetMe(variables: AdminGetMeQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<AdminGetMeQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AdminGetMeQuery>(AdminGetMeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'AdminGetMe', 'query');
     },
     InsertAdmin(variables: InsertAdminMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<InsertAdminMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<InsertAdminMutation>(InsertAdminDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'InsertAdmin', 'mutation');
