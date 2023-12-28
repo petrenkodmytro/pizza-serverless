@@ -1,3 +1,4 @@
+import { config } from "../core/config";
 import { api } from "./api";
 import { HASURA_CLAIMS, HASURA_USER_ID, getTokenData } from "./jwt";
 import { GetAdminByIdQuery } from "./sdk";
@@ -18,7 +19,7 @@ export const getAdminFromHeaders = async (headers): Promise<GetAdminByIdQuery> =
   const adminObj = getTokenData(authToken);
   const adminId = adminObj[HASURA_CLAIMS][HASURA_USER_ID];
 
-  const data = await api.GetAdminById({ id: adminId }, { "x-hasura-admin-secret": "myadminsecretkey" });
+  const data = await api.GetAdminById({ id: adminId }, { "x-hasura-admin-secret": config.hasuraAdminSecret });
 
   return data;
 };

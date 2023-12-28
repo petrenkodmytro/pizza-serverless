@@ -3,11 +3,12 @@ import { hashPassword } from "../common/password";
 import { signToken } from "../common/jwt";
 import { api } from "../common/api";
 import { AdminRegisterInput } from "../common/sdk";
+import { config } from "../core/config";
 
 export const handler: Handler = async (event, context) => {
   const { body, headers } = event;
 
-  if (!headers["x-pizzastack-secret-key"] || headers["x-pizzastack-secret-key"] !== "mypizzastacksecretkey") {
+  if (!headers["x-pizzastack-secret-key"] || headers["x-pizzastack-secret-key"] !== config.hasuraPizzastackSecret) {
     // return ERROR
     return {
       statusCode: 403,
@@ -20,7 +21,7 @@ export const handler: Handler = async (event, context) => {
 
   const password = hashPassword(input.password);
 
-  const data = await api.InsertAdmin({ username: input.username, password }, { "x-hasura-admin-secret": "myadminsecretkey" });
+  const data = await api.InsertAdmin({ username: input.username, password }, { "x-hasura-admin-secret": config.hasuraAdminSecret });
   // console.log(data);
 
   const accessToken = signToken(data.insert_admin_one?.id);
