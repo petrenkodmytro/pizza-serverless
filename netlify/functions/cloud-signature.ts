@@ -37,14 +37,14 @@ const handler: Handler = async (event, context) => {
       folder: "menu",
       public_id: publicId,
     },
-    process.env.API_SECRET!
+    config.cloudinaryApiSecret!
   );
 
   return {
     statusCode: 200,
     body: JSON.stringify({
-      apiKey: process.env.API_KEY,
-      cloudName: process.env.CLOUD_NAME,
+      apiKey: config.cloudinaryApiKey,
+      cloudName: config.cloudinaryCloudName,
       signature,
       timestamp,
       publicId,
